@@ -8,7 +8,8 @@ export linearlengths, linearpattern, lineardecoding
     linearlengths(n)
 
 Returns an array containing the valid MURA lengths up to the first one
-greater or equal to `n`.
+greater or equal to `n`.  Valid lengths are primes of the class 4i +
+1, where i is an integer (Gottesman & Fenimore 1989).
 """
 function linearlengths(n)
     result = Int[]
@@ -36,10 +37,17 @@ quadraticresidues(n::Integer) = unique(sort((1:n).^2 .% n))
 """
     linearpattern(L)
 
-Returns an array containing the linear MURA sequence with length `L`.
+Returns an array containing the linear MURA sequence with length `L`
+(Gottesman & Fenimore 1989, Eq. 11).
 """
-    vcat([0], [i in quadraticresidues(L) for i in 1:L - 1])
 function linearpattern(L::Integer)
+    if !(L in linearlengths(L))
+        throw(ArgumentError("L is not a valid length. See linearlengths()"))
+    end
+    q = quadraticresidues(L)
+    return vcat([0], [i in q for i in 1:L - 1])
+end
+
 """
     lineardecoding(L)
 
