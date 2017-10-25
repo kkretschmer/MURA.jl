@@ -2,7 +2,9 @@ module MURA
 
 using Primes
 
-export linearlengths, linearpattern, lineardecoding
+export linearlengths, linearpattern, lineardecoding,
+    squarepattern, squaremosaic, squaredecoding,
+    mosaiclengths
 
 """
     linearlengths(n)
@@ -60,6 +62,58 @@ function lineardecoding(L::Integer)
     return G
 end
 
+"""
+    squarepattern(p)
+
+Returns an array containing the square MURA pattern with `p` × `p`
+elements (Gottesman & Fenimore 1989, Eq. 13 and 14).
+"""
+function squarepattern(p::Integer)
+    if !isprime(p)
+        throw(ArgumentError("p is not a valid length.  It must be prime."))
+    end
+    A = zeros(Int, p, p)
+    q = quadraticresidues(p)
+    A[2:end, 1] = 1
+    for j in 2:p
+        for i in 2:p
+            if !((i - 1 in q) ⊻ (j - 1 in q))
+                A[i, j] = 1
+            end
+        end
+    end
+    return A
 end
+
+"""
+    squaremosaic(p)
+
+Returns an array containing the square MURA mosaicked pattern with `p` ×
+`p` elements (Gottesman & Fenimore 1989, Fig. 5).
+"""
+function squaremosaic(p::Integer)
+    A = squarepattern(p ÷ 2 + 1)
+    return hvcat((2, 2), A, A, A, A)[2:end, 2:end]
+end
+
+mosaiclengths(n) = primes(nextprime(ceil(Int, (n + 1) / 2))) * 2 - 1
+
+"""
+    squaredecoding(p)
+
+Returns an array containing the decoding pattern for the square MURA
+pattern with `p` × `p` elements (Gottesman & Fenimore 1989, Eq. 15).
+"""
+function squaredecoding(p::Integer)
+    G = squarepattern(p) * 2 - 1
+    G[1, 1] = 1
+end
+
+"""
+    symmshift(A)
+
+Rotate the array `A` to symmetrise a rectangular MURA pattern.
+"""
+symmshift(A) = circshift(A, size(A) .÷ 2)
 
 end # module
