@@ -2,7 +2,7 @@ module MURA
 
 using Primes
 
-export linearlengths, linearpattern
+export linearlengths, linearpattern, lineardecoding
 
 """
     linearlengths(n)
@@ -40,6 +40,18 @@ Returns an array containing the linear MURA sequence with length `L`.
 """
     vcat([0], [i in quadraticresidues(L) for i in 1:L - 1])
 function linearpattern(L::Integer)
+"""
+    lineardecoding(L)
+
+Returns an array containing the decoding pattern for the linear MURA
+sequence with length `L` (Gottesman & Fenimore 1989, Eq. 12).
+"""
+function lineardecoding(L::Integer)
+    G = linearpattern(L) * 2 - 1
+    G[1] = 1
+    return G
+end
+
 end
 
 end # module
