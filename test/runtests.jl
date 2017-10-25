@@ -6,7 +6,7 @@ using Base.Test
 # Gottesman & Fenimore: New family of binary arrays for coded aperture imaging
 
 # Table I. (p. 4)
-@test muralengths(74) == [5, 13, 17, 29, 37, 41, 53, 61, 73, 89]
+@test linearlengths(74) == [5, 13, 17, 29, 37, 41, 53, 61, 73, 89]
 
 # https://en.wikipedia.org/wiki/Quadratic_residue
 @testset "quadratic residue" begin
@@ -20,7 +20,7 @@ using Base.Test
 end
 
 # Table I. (p. 4)
-linearseq(L) = strip(replace(join(muralinear(L)), r"([01]{5})", s"\1 "))
+linearseq(L) = strip(replace(join(linearpattern(L)), r"([01]{5})", s"\1 "))
 lineartest(L, seq) = @test linearseq(L) == seq
 
 @testset "linear sequence" begin

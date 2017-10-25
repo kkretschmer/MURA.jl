@@ -2,15 +2,15 @@ module MURA
 
 using Primes
 
-export muralengths, muralinear
+export linearlengths, linearpattern
 
 """
-    muralengths(n)
+    linearlengths(n)
 
 Returns an array containing the valid MURA lengths up to the first one
 greater or equal to `n`.
 """
-function muralengths(n)
+function linearlengths(n)
     result = Int[]
     L = 5
     finished = false
@@ -34,12 +34,12 @@ Returns an array containing the quadratic residues modulo `n`.
 quadraticresidues(n::Integer) = unique(sort((1:n).^2 .% n))
 
 """
-    muralinear(L)
+    linearpattern(L)
 
 Returns an array containing the linear MURA sequence with length `L`.
 """
-function muralinear(L::Integer)
     vcat([0], [i in quadraticresidues(L) for i in 1:L - 1])
+function linearpattern(L::Integer)
 end
 
 end # module
