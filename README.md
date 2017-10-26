@@ -1,5 +1,7 @@
 # MURA
 
+[![Build Status](https://travis-ci.org/kkretschmer/MURA.jl.svg?branch=master)](https://travis-ci.org/kkretschmer/MURA.jl)
+
 Generate [modified uniformly redundant arrays][mura] (MURAs) as
 described in the publication below.  These arrays are used for [coded
 aperture][ca] imaging.
