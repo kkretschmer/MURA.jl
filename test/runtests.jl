@@ -59,3 +59,71 @@ end
         @test_throws ArgumentError linearpattern(88)
     end
 end # testset
+
+@testset "square pattern" begin
+    @testset "argument checking" begin
+        @test_throws ArgumentError squarepattern(9)
+        @test_throws ArgumentError linearpattern(57)
+    end
+
+    @testset "square mosaics" begin
+        # The four n×n MURA aperture patterns from Fig. 5
+        #
+        patterns = Dict(
+            5 => ["X..XXX..X",
+                  ".XX.X.XX.",
+                  ".XX.X.XX.",
+                  "X..XXX..X",
+                  ".........",
+                  "X..XXX..X",
+                  ".XX.X.XX.",
+                  ".XX.X.XX.",
+                  "X..XXX..X"],
+
+            11 => ["X.XXX...X.XX.XXX...X.",
+                   ".X...XXX.XX.X...XXX.X",
+                   "X.XXX...X.XX.XXX...X.",
+                   "X.XXX...X.XX.XXX...X.",
+                   "X.XXX...X.XX.XXX...X.",
+                   ".X...XXX.XX.X...XXX.X",
+                   ".X...XXX.XX.X...XXX.X",
+                   ".X...XXX.XX.X...XXX.X",
+                   "X.XXX...X.XX.XXX...X.",
+                   ".X...XXX.XX.X...XXX.X",
+                   ".....................",
+                   "X.XXX...X.XX.XXX...X.",
+                   ".X...XXX.XX.X...XXX.X",
+                   "X.XXX...X.XX.XXX...X.",
+                   "X.XXX...X.XX.XXX...X.",
+                   "X.XXX...X.XX.XXX...X.",
+                   ".X...XXX.XX.X...XXX.X",
+                   ".X...XXX.XX.X...XXX.X",
+                   ".X...XXX.XX.X...XXX.X",
+                   "X.XXX...X.XX.XXX...X.",
+                   ".X...XXX.XX.X...XXX.X"]
+        )
+
+        a29 = "X..XXXX.X...X..X...X.XXXX..XXX..XXXX.X...X..X...X.XXXX..X"
+        b29 = ".XX....X.XXX.XX.XXX.X....XX.X.XX....X.XXX.XX.XXX.X....XX."
+        patterns[29] = [i == 'X' ? a29 : b29 for i in a29]
+        patterns[29][29] = "........................................................."
+
+        a59 = ".X...X.X.XX.XX...X....XX.....XXXXX..XXXX.XXX..X..X.X.XXX.XX.X...X.X.XX.XX...X....XX.....XXXXX..XXXX.XXX..X..X.X.XXX.X"
+        b59 = "X.XXX.X.X..X..XXX.XXXX..XXXXX.....XX....X...XX.XX.X.X...X.XX.XXX.X.X..X..XXX.XXXX..XXXXX.....XX....X...XX.XX.X.X...X."
+        patterns[59] = [i == 'X' ? a59 : b59 for i in a59]
+        patterns[59][59] = "....................................................................................................................."
+
+        # Go through the reference patterns and compare the computed mask
+        # with the reference row-by-row. Use string comparison to easily
+        # spot differences in test output
+        for nelem in keys(patterns)
+            mymask = squaremosaic(2nelem - 1)
+            ref_mask = patterns[nelem]
+            for (n, ref_row) in enumerate(ref_mask)
+                row = join([i == 1 ? "X" : "." for i in mymask[n, :]])
+                @test row == ref_row
+            end
+        end
+
+    end # testset
+end # testset
