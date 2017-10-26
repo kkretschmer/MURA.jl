@@ -4,7 +4,7 @@ using Primes
 
 export linearlengths, linearpattern, lineardecoding,
     squarepattern, squaremosaic, squaredecoding,
-    mosaiclengths
+    mosaiclengths, symmshift
 
 """
     linearlengths(n)
