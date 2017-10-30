@@ -3,6 +3,8 @@ using Primes
 using Base.Test
 
 const maxlength = 100
+const randtests = 10
+
 # Values from the publication
 # 1989ApOpt..28.4344G, doi:10.1364_AO.28.004344
 # Gottesman & Fenimore: New family of binary arrays for coded aperture imaging
@@ -49,6 +51,22 @@ end
         )
         for (L, P) in patterns
             @test linearseq(L) == P
+        end
+    end
+
+    @testset "linear decoding" begin
+        for L in linearlengths(maxlength)
+            p, d = [L |> f |> symmshift for f in (linearpattern,
+                                                  lineardecoding)]
+            # apart from scaling, only one element differs
+            @test (d .+ 1) .÷ 2 - p .|> abs |> sum == 1
+            # test delta function like correlation
+            @test sum(p .* d) == (L - 1) ÷ 2
+            for i in 1:randtests
+                s = rand(0:L - 1)
+                @test sum(circshift(p, s) .* d) ==
+                    (iszero(s) ? (L - 1) ÷ 2 : 0)
+            end
         end
     end
 
@@ -128,13 +146,29 @@ end # testset
         for nelem in keys(patterns)
             mymask = squaremosaic(2nelem - 1)
             ref_mask = patterns[nelem]
+            @test length(ref_mask[1]) in mosaiclengths(2nelem)
             for (n, ref_row) in enumerate(ref_mask)
                 row = join([i == 1 ? "X" : "." for i in mymask[n, :]])
                 @test row == ref_row
             end
         end
-
     end # testset
+
+    @testset "square decoding" begin
+        for L in primes(3, maxlength)
+            p, d = [f(L) |> symmshift for f in (squarepattern,
+                                                squaredecoding)]
+            # apart from scaling, only one element differs
+            @test (d .+ 1) .÷ 2 - p .|> abs |> sum == 1
+            # test delta function like correlation
+            @test sum(p .* d) == (L^2 - 1) ÷ 2
+            for i in 1:randtests
+                s = rand(0:L - 1, 2)
+                @test sum(circshift(p, s) .* d) ==
+                    (iszero(s) ? (L^2 - 1) ÷ 2 : 0)
+            end
+        end
+    end
 
     @testset "symmetry" begin
         for L in primes(3, maxlength)
