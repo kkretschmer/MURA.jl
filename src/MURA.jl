@@ -107,6 +107,7 @@ pattern with `p` × `p` elements (Gottesman & Fenimore 1989, Eq. 15).
 function squaredecoding(p::Integer)
     G = squarepattern(p) * 2 - 1
     G[1, 1] = 1
+    return G
 end
 
 """
