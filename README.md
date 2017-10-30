@@ -1,6 +1,7 @@
 # MURA
 
 [![Build Status](https://travis-ci.org/kkretschmer/MURA.jl.svg?branch=master)](https://travis-ci.org/kkretschmer/MURA.jl)
+[![Coverage Status](https://coveralls.io/repos/github/kkretschmer/MURA.jl/badge.svg?branch=master)](https://coveralls.io/github/kkretschmer/MURA.jl?branch=master)
 
 Generate [modified uniformly redundant arrays][mura] (MURAs) as
 described in the publication below.  These arrays are used for [coded
