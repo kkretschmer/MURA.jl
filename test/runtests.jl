@@ -1,6 +1,8 @@
 using MURA
+using Primes
 using Base.Test
 
+const maxlength = 100
 # Values from the publication
 # 1989ApOpt..28.4344G, doi:10.1364_AO.28.004344
 # Gottesman & Fenimore: New family of binary arrays for coded aperture imaging
@@ -53,6 +55,12 @@ end
     @testset "symmetry" begin
         A = "0011010101100"
         @test linearpattern(13) |> symmshift |> join == A
+        for L in linearlengths(maxlength)
+            for s in [L |> f |> symmshift for f in (linearpattern,
+                                                    lineardecoding)]
+                @test s == reverse(s)
+            end
+        end
     end
 
     @testset "argument checking" begin
@@ -127,4 +135,13 @@ end # testset
         end
 
     end # testset
+
+    @testset "symmetry" begin
+        for L in primes(3, maxlength)
+            for m in [f(L) |> symmshift for f in (squarepattern,
+                                                  squaredecoding)]
+                @test m == rot180(m)
+            end
+        end
+    end
 end # testset
