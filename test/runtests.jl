@@ -1,6 +1,6 @@
 using MURA
 using Primes
-using Base.Test
+using Test
 
 const maxlength = 100
 const randtests = 10
@@ -28,7 +28,7 @@ end
     #
     @testset "linear pattern" begin
         linearseq(L) =
-            strip(replace(join(linearpattern(L)), r"([01]{5})", s"\1 "))
+            strip(replace(join(linearpattern(L)), r"([01]{5})" => s"\1 "))
         patterns = Dict(
             05 => "01001",
             13 => "01011 00001 101",

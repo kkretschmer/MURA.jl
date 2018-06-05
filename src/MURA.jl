@@ -57,7 +57,7 @@ Returns an array containing the decoding pattern for the linear MURA
 sequence with length `L` (Gottesman & Fenimore 1989, Eq. 12).
 """
 function lineardecoding(L::Integer)
-    G = linearpattern(L) * 2 - 1
+    G = linearpattern(L) .* 2 .- 1
     G[1] = 1
     return G
 end
@@ -74,7 +74,7 @@ function squarepattern(p::Integer)
     end
     A = zeros(Int, p, p)
     q = quadraticresidues(p)
-    A[2:end, 1] = 1
+    A[2:end, 1] .= 1
     for j in 2:p
         for i in 2:p
             if !((i - 1 in q) ⊻ (j - 1 in q))
@@ -96,7 +96,7 @@ function squaremosaic(p::Integer)
     return hvcat((2, 2), A, A, A, A)[2:end, 2:end]
 end
 
-mosaiclengths(n) = primes(nextprime(ceil(Int, (n + 1) / 2))) * 2 - 1
+mosaiclengths(n) = primes(nextprime(ceil(Int, (n + 1) / 2))) .* 2 .- 1
 
 """
     squaredecoding(p)
@@ -105,7 +105,7 @@ Returns an array containing the decoding pattern for the square MURA
 pattern with `p` × `p` elements (Gottesman & Fenimore 1989, Eq. 15).
 """
 function squaredecoding(p::Integer)
-    G = squarepattern(p) * 2 - 1
+    G = squarepattern(p) .* 2 .- 1
     G[1, 1] = 1
     return G
 end
