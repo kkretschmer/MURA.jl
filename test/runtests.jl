@@ -1,6 +1,6 @@
 using MURA
 using Primes
-using Test
+using Compat.Test
 
 const maxlength = 100
 const randtests = 10
